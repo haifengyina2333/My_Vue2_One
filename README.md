@@ -19,4 +19,12 @@ npm run build
 ```
 npm run lint
 ```
+### 项目使用的接口文档地址:
+
+`http://xiaoyaoji.cn/project/1h9xcTeAZzV/1hFEmCMdmdc?st=1iUU09vKhMm&sid=1iUU09vKhMm`
+
+### 项目技术要点:
+
+- 对axios进行二次封装,便于使用(request下的request.js)
+- 整和所有api地址为一个文件,方便管理(request下的api.js)
 
