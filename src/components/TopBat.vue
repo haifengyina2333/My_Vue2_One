@@ -13,7 +13,7 @@
           <li>我的鸡腿:--</li>
           <li>获取积分</li>
           <li>个人主页</li>
-          <li class="login-btn">登录</li>
+          <li class="login-btn" @click="toLogin">登录</li>
         </ul>
       </div>
     </div>
@@ -21,8 +21,16 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 export default {
-
+  methods:{
+    ...mapMutations({
+      chanIsShowLoginModal:"showLoginModal/chanIsShowLoginModal"
+    }),
+    toLogin(){
+      this.chanIsShowLoginModal(true)// 修改Vuex的中的值
+    }
+  }
 }
 </script>
 

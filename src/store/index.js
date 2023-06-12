@@ -4,15 +4,20 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 //应用Vuex插件
 Vue.use(Vuex)
+
+import showLoginModal from './showLoginModal'
 //准备actions对象一响应组件中用户的动作
-const actions = { }
-//准备mutations对象一修改state中的数据
-const mutations = {}
-//准备state对象一保存具体的数据
-const state = {}
+// const actions = { }
+// //准备mutations对象一修改state中的数据
+// const mutations = {}
+// //准备state对象一保存具体的数据
+// const state = {}
 //创建并暴露store
 export default new Vuex.Store({
-    actions,
-    mutations,
-    state
+    // actions,
+    // mutations,
+    // state,
+    modules:{
+        showLoginModal
+    }
 })
