@@ -28,3 +28,5 @@ npm run lint
 - 对axios进行二次封装,便于使用(request下的request.js)
 - 整和所有api地址为一个文件,方便管理(request下的api.js)
 
+### 每日记录
+day2：完成了初级路由，以及登录功能的交互
