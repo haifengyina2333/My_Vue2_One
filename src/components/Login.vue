@@ -22,7 +22,7 @@
                             :slider-text="msg"></slide-verify>
                     </div>
                     <div class="input-gruop">
-                        <input type="text" class="code" placeholder="请输入短信验证码">
+                        <input type="text" class="code" placeholder="请输入短信验证码" v-model="SMScode">
                         <div class="btn" :class="isShowSMCode ?'kill':''" >
                         <span v-show="!isShowSMCode" @click="getSMcode
                         ">获取验证码</span>
@@ -40,24 +40,33 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-import instance from '@/request/request';
+import { mapMutations, mapState } from 'vuex';
+// import instance from '@/request/request';
 import {validatePhoneNum} from '../util/index'
+import { SendSMSAPI,PhoneLoginAPI } from '../request/api';
 export default {
     data() {
         return {
             isShowForm: true,
             msg: "向右滑动",
             // 手机号
-            phoneNum:'',
+            phoneNum:'18814433339',
             isShowSMCode:false,
-            count:60
+            count:60,
+            SMScode:"233333",
             
         }
     },
+    computed:{
+        ...mapState({
+            isShowToast:state=>state.isShowToast.isShowToast
+        })
+    },
     methods: {
         ...mapMutations({
-            chanIsShowLoginModal: "showLoginModal/chanIsShowLoginModal"
+            chanIsShowLoginModal: "showLoginModal/chanIsShowLoginModal",
+            chanIsLogined:"isLoginedStatus/chanIsLogined",
+            
         }),
         close() {
             this.chanIsShowLoginModal(false)
@@ -76,35 +85,45 @@ export default {
             this.msg = "再试⼀次";
         },
         // 登录按钮的代码
-        submitLogin(){
+        async submitLogin(){
             // - 手机号码验证
-
             // - 图片验证码验证
-            if(this.msg ==  "再试⼀次" || this.msg == "向右滑动" ){
-                alert("请你滑到滑块到正确位置！")
-                return
+            if(!this.virifyFn()){
+                return 
             }
-
-            alert("登陆成功！")
+            let res  = await PhoneLoginAPI({
+                phone:this.phoneNum.trim(),
+                verifyCode:this.SMScode.trim()
+            })
+            console.log(res);
+            if(res.code == 0){
+                // 1.提示登录成功
+                alert("登陆成功！")
+                // 2.关闭登录窗口
+                this.close()
+                // 3.保存token
+                localStorage.setItem("x-auth-token",res["x-auth-token"])
+                // 4.登录状态切换
+                this.chanIsLogined(true);
+            }
         },
         // 短信验证码
-        getSMcode(){
-            
-            if (!validatePhoneNum(this.phoneNum)){
-                alert("请您输入正确的手机号码")
-                // 聚焦用户鼠标焦点
-                this.$refs.phone.focus()
-                return
-            }
-            // 2.图片验证是否正确
-            if(this.msg ==  "再试⼀次" || this.msg == "向右滑动" ){
-                alert("请你滑到滑块到正确位置！")
-                return
+        async getSMcode(){
+            if(!this.virifyFn()){
+                return 
             }
             // 3.发送验证码 --- axios 请求
-            this.isShowSMCode = true;
-            this.countDown();
+            let res = await SendSMSAPI ({
+                phone:this.phoneNum.trim(),
+            });
+            if(res.code == 0){
+                console.log(res);
+                this.isShowSMCode = true;
+                this.countDown();
+                alert("验证码已发送！")
+            }              
         },
+        // 倒计时代码
         countDown(){
             let timer = setInterval(()=>{
                 this.count--
@@ -114,6 +133,21 @@ export default {
                     this.count = 60;
                 }
             },1000)
+        },
+        // 手机号和图片验证码 验证
+        virifyFn(){
+            if (!validatePhoneNum(this.phoneNum)){
+                alert("请您输入正确的手机号码")
+                // 聚焦用户鼠标焦点
+                this.$refs.phone.focus()
+                return false
+            }
+            // 2.图片验证是否正确
+            if(this.msg ==  "再试⼀次" || this.msg == "向右滑动" ){
+                alert("请你滑到滑块到正确位置！")
+                return false
+            }
+            return true
         }
     }
 }

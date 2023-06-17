@@ -21,8 +21,16 @@ instance.interceptors.request.use(config=>{
 
 // 响应拦截器
 instance.interceptors.response.use(res=>{
-    return res.data;
+    // 统一处理 code 不为零
+    let res_data = res.data;
+    if(res_data.code != 0 ){
+        alert(res_data.message); 
+    }
+    return res_data;
+
 }),err=>{
+    // 响应失败之后的catch
+    alert(err)
     return Promise.reject(err)
 }
 
