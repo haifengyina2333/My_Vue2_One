@@ -8,10 +8,9 @@
       <div class="r">
         <ul>
           <li>
-            <img width="26px" src="../assets/img/logo.jpg" alt="" @click="chanIsShowToast({
-              isShow:true,
+            <img width="26px" src="../assets/img/logo.jpg" alt="" @click="asynnChanIsShowToast({
               msg:`test！`,
-              type:`waring`,
+              type:`waring`
               // danger  waring success
             })">
           </li>
@@ -31,7 +30,7 @@
 </template>
 
 <script>
-import { mapMutations,mapState } from 'vuex';
+import { mapMutations,mapState,mapActions } from 'vuex';
 export default {
   data(){
     return{
@@ -47,9 +46,10 @@ export default {
   methods:{
     ...mapMutations({
       // 显示登录窗口
-      chanIsShowLoginModal:"showLoginModal/chanIsShowLoginModal",
+      chanIsShowLoginModal:"showLoginModal/chanIsShowLoginModal"}),
       // 导入提示框
-      chanIsShowToast:"isShowToast/chanIsShowToast"
+    ...mapActions({
+      asynnChanIsShowToast:"isShowToast/asynnChanIsShowToast"
     }),
     toLogin(){
       this.chanIsShowLoginModal(true)// 修改Vuex的中的值
