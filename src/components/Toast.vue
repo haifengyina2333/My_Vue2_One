@@ -1,8 +1,8 @@
 <template>
     <!-- 提示框组件 -->
     <div class="Toast">
-        <i class="iconfont " :class="toastType == 'success' ? 'iconfont icon-toast_chenggong' :
-            (toastType == 'danger' ? 'iconfont icon-toast-shibai_huaban' : 'iconfont icon-toast-jinggao')"></i>
+        <i class="iconfont " :class="type == 'success' ? 'iconfont icon-toast_chenggong' :
+            (type == 'danger' ? 'iconfont icon-toast-shibai_huaban' : 'iconfont icon-toast-jinggao')"></i>
         <span>{{ msg }}</span>
     </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 import { mapState } from 'vuex';
 export default {
-    name:"Toast",
+    name: "Toast",
     data() {
         return {
 
@@ -22,7 +22,15 @@ export default {
 
 }
 </script>
-
+<!-- 
+    封装Toast组件总结：
+        样式结构
+        显示隐藏变量存在Vuex中
+        过渡效果（进场离场）
+        msg和type属性处理
+        定时器，关闭Toast:组件
+        抽取定时器到actions的方法中
+ -->
 <style lang="less" scoped>
 .Toast {
     position: fixed;
@@ -51,4 +59,5 @@ export default {
     .icon-toast-shibai_huaban {
         color: red;
     }
-}</style>
+}
+</style>

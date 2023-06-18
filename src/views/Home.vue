@@ -25,8 +25,8 @@ export default {
 
   async created() {
      // await 后一般放Promise对象,对象里面异步操作
-    let res = await JingpinAPI();
-    console.log(res);
+    // let res = await JingpinAPI();
+    // console.log(res);
 
   }
 

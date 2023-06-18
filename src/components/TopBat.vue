@@ -1,5 +1,4 @@
 <template>
-  
   <div class="top-bar">
     <div class="wrap top-bar-wrap">
       <div class="l">
@@ -9,12 +8,12 @@
         <ul>
           <li>
             <img width="26px" src="../assets/img/logo.jpg" alt="" @click="asynnChanIsShowToast({
-              msg:`test！`,
-              type:`waring`
+              msg: `test！`,
+              type: `waring`
               // danger  waring success
             })">
           </li>
-          <li >我的鸡腿:--</li>
+          <li>我的鸡腿:--</li>
           <li>获取积分</li>
           <li>个人主页</li>
           <li v-show="!isLogined" class="login-btn" @click="toLogin">登录</li>
@@ -30,28 +29,83 @@
 </template>
 
 <script>
-import { mapMutations,mapState,mapActions } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
+import { wechanLoginAPI } from '@/request/api';
 export default {
-  data(){
-    return{
-      sum:0
+  data() {
+    return {
+      sum: 0
     }
   },
-  computed:{
+  watch:{
+    // 修复当token不存在时，路由切换时用户状态的变换
+    "$route.path":{
+      handler(newVal,oldVal){
+        let token = localStorage.getItem("x-auth-token");
+        // if(token){
+        //   this.chanIsLogined(true);
+        // }else{
+        //   this.chanIsLogined(false);
+        // }
+        this.chanIsLogined(Boolean(token));
+      }
+    }
+  }
+  ,
+  created() {
+    setTimeout(async () => {
+      let mycode = this.$route.query.code
+      if (mycode) {
+        let res = await wechanLoginAPI({ code: mycode });
+        console.log(res);
+        if (res.code == 0) {
+          // 登陆成功
+          this.asynnChanIsShowToast({
+                  msg: "登录成功！",
+                  type: "success"
+                });
+          this.$router.push(this.$route.path)
+          // 3.保存token
+          localStorage.setItem("x-auth-token", res["x-auth-token"])
+          // 4.登录状态切换
+          this.chanIsLogined(true);
+        } else if (res.code == 400) {
+
+          this.asynnChanIsShowToast({
+            type:"danger",
+            msg:" 二维码已失效"
+          });
+          this.chanIsShowLoginModal(true);
+
+        } else if (res.code == 407) {
+          this.asynnChanIsShowToast({
+            msg:"首次使用微信登录需用手机登录以获取手机号！",
+            type:"warning"
+          });
+          // 临时保存uuid
+          localStorage.setItem("uuid",res.uuid)
+          this.chanIsShowLoginModal(true);
+        }
+      }
+    }, 100)
+  },
+  computed: {
     ...mapState({
-      isLogined:state=>state.isLoginedStatus.isLogined,
-      isShowToast:state=>state.isShowToast.isShowToast
+      isLogined: state => state.isLoginedStatus.isLogined,
+      isShowToast: state => state.isShowToast.isShowToast
     })
   },
-  methods:{
+  methods: {
     ...mapMutations({
       // 显示登录窗口
-      chanIsShowLoginModal:"showLoginModal/chanIsShowLoginModal"}),
-      // 导入提示框
-    ...mapActions({
-      asynnChanIsShowToast:"isShowToast/asynnChanIsShowToast"
+      chanIsShowLoginModal: "showLoginModal/chanIsShowLoginModal",
+      chanIsLogined:"isLoginedStatus/chanIsLogined"
     }),
-    toLogin(){
+    // 导入提示框
+    ...mapActions({
+      asynnChanIsShowToast: "isShowToast/asynnChanIsShowToast"
+    }),
+    toLogin() {
       this.chanIsShowLoginModal(true)// 修改Vuex的中的值
     }
   }
@@ -59,7 +113,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.top-bar{
+.top-bar {
   height: 40px;
   color: #fffefe;
   background-color: #242b39;
@@ -67,19 +121,21 @@ export default {
 }
 
 
-.top-bar .top-bar-wrap{
+.top-bar .top-bar-wrap {
   display: flex;
   /* background-color: pink; */
   height: 40px;
   justify-content: space-between;
-  font-family:300;
+  font-family: 300;
   font-size: 14px;
 
 }
-.r ul{
+
+.r ul {
   display: flex;
 }
-.r ul li{
+
+.r ul li {
   cursor: pointer;
   /* 小手 */
   display: flex;
@@ -87,25 +143,28 @@ export default {
   margin-left: 20px;
 }
 
-.r ul li img{
+.r ul li img {
   border-radius: 50%;
   margin-right: 6px;
 }
-.r ul .login-btn{
+
+.r ul .login-btn {
   width: 128px;
   background-color: #4774dc;
   justify-content: center;
 }
-.gwc-btn{
+
+.gwc-btn {
   background-color: #4774dc;
-  img{
+
+  img {
     margin-left: 20px;
     height: 28px;
   }
-  span{
 
-  }
-  b{
+  span {}
+
+  b {
     margin-left: 4px;
     height: 20px;
     width: 20px;

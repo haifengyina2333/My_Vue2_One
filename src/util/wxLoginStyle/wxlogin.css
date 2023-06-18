@@ -1,0 +1,12 @@
+/* wxlogin.css */
+.impowerBox .title, .impowerBox .info{
+  display: none;
+}
+
+.impowerBox .qrcode{
+  margin-top: 20px;
+  width: 250px;
+}
+#wx_default_tip p:last-child{
+  display: none;
+}

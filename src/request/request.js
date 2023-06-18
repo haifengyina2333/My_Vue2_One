@@ -1,6 +1,6 @@
 // 对axios进行封装
 import axios from 'axios'
-
+import store from '../store'
 // 创建axios实例
 
 const instance = axios.create({
@@ -23,14 +23,18 @@ instance.interceptors.request.use(config=>{
 instance.interceptors.response.use(res=>{
     // 统一处理 code 不为零
     let res_data = res.data;
-    if(res_data.code != 0 ){
-        alert(res_data.message); 
+    if(res_data.code != 0 && res_data.code != 400 && res_data.code!= 407){
+        store._actions["isShowToast/asynnChanIsShowToast"][0]({
+            msg:res_data.message,
+            type:"danger"
+        })
     }
     return res_data;
-
 }),err=>{
-    // 响应失败之后的catch
-    alert(err)
+    store._actions["isShowToast/asynnChanIsShowToast"][0]({
+        msg:err,
+        type:"danger"
+    })
     return Promise.reject(err)
 }
 
