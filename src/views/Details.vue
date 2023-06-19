@@ -169,7 +169,7 @@ export default {
           msg:"加入购物车成功！"
         })
         console.log("购物车请求成功！",res);
-        // this.$emit("fn");
+        this.$emit("fn");
       },
       step(val){
         if(val == -1 && this.stepNum == 1 || val==1&&this.stepNum>=this.productInfo.stock){
@@ -185,6 +185,7 @@ export default {
       toGoosPages(id){
         this.$router.push(`/detalis?id=${id}`)
         this.getGoodsInfo(id);
+        this.$emit("fn");
         this.stepNum = 1;
         
       },

@@ -32,15 +32,15 @@ export default {
   },
   data(){
     return{
-    
+      topBatkeyValue:1
     }
   },
   // 组件重载
   watch:{
     "$route.path":{
       handler(newVal,oldVal){
-        if(newVal!= oldVal){
-          this.topBatkeyValue++
+        if(newVal != oldVal){
+          this.topBatkeyValue++;
         }
       }
     }

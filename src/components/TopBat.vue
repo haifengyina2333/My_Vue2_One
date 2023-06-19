@@ -7,7 +7,7 @@
       <div class="r">
         <ul>
           <li>
-            <img width="26px" :src="UserInfo.headImg" alt="" >
+            <img width="26px" :src="UserInfo.headImg" alt="">
             <!-- @click="asyncChanUserInfo()" -->
           </li>
           <li>我的鸡腿:{{ UserInfo.coin }}</li>
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       // sum: 0
+      // flag: true
     }
   },
   // 没有使用组件重载的代码
@@ -54,56 +55,118 @@ export default {
   // -------------------------------------
   // 组件重载.重载就可以引起created的执行 查看app.vue
   created() {
-    this.$nextTick().then(async () => {
-      let mycode = this.$route.query.code
-      if (mycode) {
-        let res = await wechanLoginAPI({ code: mycode });
-        console.log("微信登录响应----",res);
-        if (res.code == 0) {
-          // 登陆成功
-          this.asynnChanIsShowToast({
-            msg: "登录成功！",
-            type: "success"
-          });
-          // 3.保存token
-          localStorage.setItem("x-auth-token", res["x-auth-token"])
-          // 4.登录状态切换
-          this.chanIsLogined(true);
+   
+  
+      this.$nextTick(async () => {
+        let mycode = this.$route.query.code
+        if (mycode) {
+          let res = await wechanLoginAPI({ code: mycode });
+          console.log("微信登录响应----", res);
+          if (res.code == 0) {
+            // 登陆成功
+            this.asynnChanIsShowToast({
+              msg: "登录成功！",
+              type: "success"
+            });
+            // 3.保存token
+            localStorage.setItem("x-auth-token", res["x-auth-token"])
+            // 4.登录状态切换
+            this.chanIsLogined(true);
 
-          this.$router.push(this.$route.path)
+            this.$router.push(this.$route.path)
+
+            this.asyncChanUserInfo();
+
+          } else if (res.code == 400) {
+
+            this.asynnChanIsShowToast({
+              type: "danger",
+              msg: " 二维码已失效"
+            });
+            this.chanIsShowLoginModal(true);
+
+          } else if (res.code == 407) {
+            this.asynnChanIsShowToast({
+              msg: "首次使用微信登录需用手机登录以获取手机号！",
+              type: "warning"
+            });
+            // 临时保存uuid
+            localStorage.setItem("uuid", res.uuid)
+            this.chanIsShowLoginModal(true);
+          }
+          this.flag = true;
           
-          this.asyncChanUserInfo();
-
-        } else if (res.code == 400) {
-
-          this.asynnChanIsShowToast({
-            type: "danger",
-            msg: " 二维码已失效"
-          });
-          this.chanIsShowLoginModal(true);
-
-        } else if (res.code == 407) {
-          this.asynnChanIsShowToast({
-            msg: "首次使用微信登录需用手机登录以获取手机号！",
-            type: "warning"
-          });
-          // 临时保存uuid
-          localStorage.setItem("uuid", res.uuid)
-          this.chanIsShowLoginModal(true);
-        }
-      } else {
-        // 组件重载: 用户没登录或者是已经登录的情况下
-        let token = localStorage.getItem("x-auth-token");
-        this.chanIsLogined(Boolean(token));
-        if (token) {
-          // 已经登录
-          this.asyncChanUserInfo();
         } else {
-          // 没有登录的情况下
-          this.initUserInfo();
+          // 组件重载: 用户没登录或者是已经登录的情况下
+          let token = localStorage.getItem("x-auth-token");
+          this.chanIsLogined(Boolean(token));
+          if (token) {
+            // 已经登录
+            // console.log("执行");
+
+            this.asyncChanUserInfo();
+
+          } else {
+            // 没有登录的情况下
+            this.initUserInfo();
+
+          }
         }
-      }
-    })
+      })
+    
+    //   this.$nextTick().then(async () => {
+    //     // console.log("执行了topBar的created方法");
+    //     let mycode = this.$route.query.code
+    //     if (mycode) {
+    //       let res = await wechanLoginAPI({ code: mycode });
+    //       console.log("微信登录响应----",res);
+    //       if (res.code == 0) {
+    //         // 登陆成功
+    //         this.asynnChanIsShowToast({
+    //           msg: "登录成功！",
+    //           type: "success"
+    //         });
+    //         // 3.保存token
+    //         localStorage.setItem("x-auth-token", res["x-auth-token"])
+    //         // 4.登录状态切换
+    //         this.chanIsLogined(true);
+
+    //         this.$router.push(this.$route.path)
+
+    //         this.asyncChanUserInfo();
+
+    //       } else if (res.code == 400) {
+
+    //         this.asynnChanIsShowToast({
+    //           type: "danger",
+    //           msg: " 二维码已失效"
+    //         });
+    //         this.chanIsShowLoginModal(true);
+
+    //       } else if (res.code == 407) {
+    //         this.asynnChanIsShowToast({
+    //           msg: "首次使用微信登录需用手机登录以获取手机号！",
+    //           type: "warning"
+    //         });
+    //         // 临时保存uuid
+    //         localStorage.setItem("uuid", res.uuid)
+    //         this.chanIsShowLoginModal(true);
+    //       }
+    //     } else {
+    //       // 组件重载: 用户没登录或者是已经登录的情况下
+    //       let token = localStorage.getItem("x-auth-token");
+    //       this.chanIsLogined(Boolean(token));
+    //       if (token) {
+    //         // 已经登录
+    //         // console.log("执行");
+
+    //         this.asyncChanUserInfo();
+    //       } else {
+    //         // 没有登录的情况下
+    //         this.initUserInfo();
+    //       }
+    //     }
+    //   })
   },
   computed: {
     ...mapState({
