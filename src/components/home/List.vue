@@ -2,7 +2,7 @@
   <ul class="list">
     <li v-for="item,index in arr" :key="item.id" v-show="index<maxLength" @click="goToDeatails(item.id)">
       <section>
-        <img class="img" :src="`http://sc.wolfcode.cn${item.coverImg}`" alt="" />
+        <img class="img" :src="imgBaseUrl + item.coverImg" alt="" />
         <div class="bottom-box">
           <h3>{{ item.name }}</h3>
           <p>{{ item.coin }} 积分</p>

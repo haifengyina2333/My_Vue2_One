@@ -7,7 +7,8 @@
       <div class="r">
         <ul>
           <li>
-            <img width="26px" :src="UserInfo.headImg" alt="" @click="asyncChanUserInfo()">
+            <img width="26px" :src="UserInfo.headImg" alt="" >
+            <!-- @click="asyncChanUserInfo()" -->
           </li>
           <li>我的鸡腿:{{ UserInfo.coin }}</li>
           <li>获取积分</li>
@@ -102,7 +103,7 @@ export default {
           this.initUserInfo();
         }
       }
-    }, 100)
+    })
   },
   computed: {
     ...mapState({

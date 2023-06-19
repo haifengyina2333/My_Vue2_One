@@ -67,6 +67,7 @@ export default {
     let Rmres = await ReMenAPI();
     // console.log(Jpres);
     this.remenArr = Rmres.data.data.records
+    console.log("首页数据----",Jpres,Rmres);
   },
 };
 </script>

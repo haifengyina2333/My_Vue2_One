@@ -4,7 +4,7 @@
     <!-- 重载 -->
     <TopBat :key="topBatkeyValue"></TopBat>
     <Header></Header>
-    <router-view></router-view>
+    <router-view @fn="addtopBatkeyValue"></router-view>
     <Footer></Footer>
 
     <!-- 登录窗口 -->
@@ -32,7 +32,7 @@ export default {
   },
   data(){
     return{
-      
+    
     }
   },
   // 组件重载
@@ -44,6 +44,12 @@ export default {
         }
       }
     }
+  },
+  methods:{
+    addtopBatkeyValue(){
+      this.topBatkeyValue++
+    }
+    
   },
   computed:{
     ...mapState({

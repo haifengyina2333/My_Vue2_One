@@ -27,3 +27,6 @@ export const UserProfilesAPI = () =>request.get("/shop/userProfiles");
 
 // 商品详情
 export const GoodsDetailsAPI = (id) => request.get(`/products/${id}`);
+
+// 加入购物车
+export const addToCarAPI = (params) => request.post("/shop/carts/add",qs.stringify(params));

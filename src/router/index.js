@@ -27,7 +27,7 @@ const routes = [
         component:()=>import('../views/Free.vue')
     },{
         path:'/detalis',
-        component:()=>import("../views/Detail.vue")
+        component:()=>import("../views/Details.vue")
     }
  
 ]
