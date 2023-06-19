@@ -71,7 +71,8 @@ export default {
 
         }),
         ...mapActions({
-            asynnChanIsShowToast: "isShowToast/asynnChanIsShowToast"
+            asynnChanIsShowToast: "isShowToast/asynnChanIsShowToast",
+            asyncChanUserInfo:"UserInfo/asyncChanUserInfo"
         }),
         close() {
             this.chanIsShowLoginModal(false)
@@ -89,7 +90,7 @@ export default {
                 // 扫码成功后重定向的接⼝
                 redirect_uri: "https://sc.wolfcode.cn/cms/wechatUsers/shop/PC",
                 // state填写编码后的url
-                state: encodeURIComponent(window.btoa("http://127.0.0.1:8080" +
+                state: encodeURIComponent(window.btoa("http://localhost:8080" +
                     _this.$route.path)),
                 // 调⽤样式⽂件
                 href: "data:text/css;base64,Lyogd3hsb2dpbi5jc3MgKi8NCi5pbXBvd2VyQm94IC50aXRsZSwgLmltcG93ZXJCb3ggLmluZm97DQogIGRpc3BsYXk6IG5vbmU7DQp9DQoNCi5pbXBvd2VyQm94IC5xcmNvZGV7DQogIG1hcmdpbi10b3A6IDIwcHg7DQogIHdpZHRoOiAyNTBweDsNCn0NCiN3eF9kZWZhdWx0X3RpcCBwOmxhc3QtY2hpbGR7DQogIGRpc3BsYXk6IG5vbmU7DQp9",
@@ -144,11 +145,14 @@ export default {
                 localStorage.setItem("x-auth-token", res["x-auth-token"])
                 // 4.登录状态切换
                 this.chanIsLogined(true);
+                
                 // 5.删除uuid,并且删除浏览器的code
                 if(uuid){
                     localStorage.removeItem("uuid");
                     this.$router.push(this.$route.path)
                 }
+                // 登录成功之后,发送用户请求 封在Vuex里了
+               this.asyncChanUserInfo();
             
         },
         // 短信验证码

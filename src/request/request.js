@@ -11,8 +11,11 @@ const instance = axios.create({
 //请求前的准备工作 比如请求头
 instance.interceptors.request.use(config=>{
     // config 是一个请求对象，是关于本次请求的信息
-
-
+    // 如果有token就带上token
+    const token = localStorage.getItem("x-auth-token");
+    if(token){
+        config.headers["x-auth-token"] = token;
+    }
     return config
     // 如果不返回，请求无法继续发送
 },err=>{

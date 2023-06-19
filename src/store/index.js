@@ -8,6 +8,7 @@ Vue.use(Vuex)
 import showLoginModal from './showLoginModal'
 import isLoginedStatus from "./loginedStatus";
 import isShowToast from "./showToast"
+import UserInfo from './UserInfo';
 //准备actions对象一响应组件中用户的动作
 // const actions = { }
 // //准备mutations对象一修改state中的数据
@@ -20,6 +21,6 @@ export default new Vuex.Store({
     // mutations,
     // state,
     modules:{
-        showLoginModal,isLoginedStatus,isShowToast
+        showLoginModal,isLoginedStatus,isShowToast,UserInfo
     }
 })

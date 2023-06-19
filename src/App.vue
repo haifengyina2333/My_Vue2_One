@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <!-- 顶部直通车 -->
-    <TopBat></TopBat>
+    <!-- 重载 -->
+    <TopBat :key="topBatkeyValue"></TopBat>
     <Header></Header>
     <router-view></router-view>
     <Footer></Footer>
@@ -32,6 +33,16 @@ export default {
   data(){
     return{
       
+    }
+  },
+  // 组件重载
+  watch:{
+    "$route.path":{
+      handler(newVal,oldVal){
+        if(newVal!= oldVal){
+          this.topBatkeyValue++
+        }
+      }
     }
   },
   computed:{
