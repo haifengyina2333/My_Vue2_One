@@ -151,6 +151,7 @@ export default {
         // 获取到id后，发起请求
         this.getGoodsInfo(id);
     },
+    props:['fn'],
     methods:{
       ...mapActions({
         asynnChanIsShowToast:"isShowToast/asynnChanIsShowToast",
@@ -169,7 +170,7 @@ export default {
           msg:"加入购物车成功！"
         })
         console.log("购物车请求成功！",res);
-        this.$emit("fn");
+        this.fn();
       },
       step(val){
         if(val == -1 && this.stepNum == 1 || val==1&&this.stepNum>=this.productInfo.stock){

@@ -4,7 +4,7 @@
     <!-- 重载 -->
     <TopBat :key="topBatkeyValue"></TopBat>
     <Header></Header>
-    <router-view @fn="addtopBatkeyValue"></router-view>
+    <router-view :fn="addtopBatkeyValue"></router-view>
     <Footer></Footer>
 
     <!-- 登录窗口 -->

@@ -11,12 +11,12 @@
             <!-- @click="asyncChanUserInfo()" -->
           </li>
           <li>我的鸡腿:{{ UserInfo.coin }}</li>
-          <li>获取积分</li>
-          <li>个人主页</li>
+          <li @click="err">获取积分</li>
+          <li @click="go">个人主页</li>
           <li v-show="!isLogined" class="login-btn" @click="toLogin">登录</li>
-          <li v-show="isLogined" class="gwc-btn">
+          <li v-show="isLogined" class="gwc-btn" @click="toCart">
             <img src="../assets/img/gwc.png" alt="">
-            <span>购物车</span>
+            <span >购物车</span>
             <b>{{ sum }}</b>
           </li>
         </ul>
@@ -190,6 +190,20 @@ export default {
     }),
     toLogin() {
       this.chanIsShowLoginModal(true)// 修改Vuex的中的值
+    },
+    toCart(){
+      this.$router.push({
+        name:"cart"
+      })
+    },
+    err(){
+      this.asynnChanIsShowToast({
+          msg: "该功能未完成",
+          type: "danger"
+        });
+    },
+    go(){
+      window.location.href="https://gitee.com/xuejiuainiyo"
     }
   }
 }
