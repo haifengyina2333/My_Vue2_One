@@ -52,10 +52,10 @@ export default {
             isShowForm: true,
             msg: "向右滑动",
             // 手机号
-            phoneNum: '18814433339',
+            phoneNum: '',
             isShowSMCode: false,
             count: 60,
-            SMScode: "233333",
+            SMScode: "",
 
         }
     },

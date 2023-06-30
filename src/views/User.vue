@@ -89,7 +89,7 @@ export default {
     }else{
       // 提示没有登录
       store._actions["isShowToast/asynnChanIsShowToast"][0]({
-          msg: "你还没有登录！2222",
+          msg: "你还没有登录!",
           type: "danger",
       });
       
